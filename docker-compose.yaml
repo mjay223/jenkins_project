@@ -1,0 +1,31 @@
+networks:
+  frontend:
+  backend:
+volumes:
+  webvol:
+services:
+  web:
+   image: nginx
+   ports:
+     - 8888:80
+   networks:
+     - frontend
+   volumes:
+     - webvol:/usr/share/nginx/html
+   depends_on:
+     - application
+  mysql:
+   image: mysql:5.6
+   networks:
+     - backend
+   environment:
+       MYSQL_ROOT_PASSWORD: redhat
+       MYSQL_USER: mjay
+       MYSQL_PASSWORD: rhel
+  application:
+    image: redis
+    networks:
+      - backend
+      - frontend
+    depends_on:
+      - mysql
